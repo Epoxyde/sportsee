@@ -1,0 +1,13 @@
+[
+  {
+    "date": "2026-11-02",
+    "distance": 7,
+    "duration": 45,
+    "heartRate": {
+      "min": 140,
+      "max": 177,
+      "average": 163
+    },
+    "caloriesBurned": 495
+  }
+]
