@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useUserInfo } from "../hooks/useUserInfo";
+import { useUserActivity } from "../hooks/useUserActivity";
 
 export function meta() {
   return [
@@ -9,6 +11,18 @@ export function meta() {
 
 export default function Home() {
   const { user, loading, error } = useUserInfo();
+  const [startDate, setStartDate] = useState("2026-11-02");
+  const [endDate, setEndDate] = useState("2026-11-08");
+  const {
+    activities,
+    loading: activitiesLoading,
+    error: activitiesError,
+  } = useUserActivity(startDate, endDate);
+  const periodError = !startDate || !endDate
+    ? "Renseignez les deux dates."
+    : startDate > endDate
+      ? "La date de début doit précéder ou être égale à la date de fin."
+      : null;
 
   return (
     <main className="mx-auto max-w-3xl space-y-6 p-8 text-gray-900 dark:text-gray-100">
@@ -50,6 +64,76 @@ export default function Home() {
       ) : (
         <p>Aucune information utilisateur disponible.</p>
       )}
+      <section className="space-y-4" aria-labelledby="activities-title">
+        <h2 id="activities-title" className="text-xl font-semibold">
+          Vos séances
+        </h2>
+
+        <div className="flex flex-wrap gap-4">
+          <label className="flex flex-col gap-1">
+            Du
+            <input
+              type="date"
+              value={startDate}
+              onChange={(event) => setStartDate(event.target.value)}
+              aria-invalid={Boolean(periodError)}
+              aria-describedby={periodError ? "period-error" : undefined}
+              className="rounded border border-gray-400 p-2"
+            />
+          </label>
+          <label className="flex flex-col gap-1">
+            Au
+            <input
+              type="date"
+              value={endDate}
+              onChange={(event) => setEndDate(event.target.value)}
+              aria-invalid={Boolean(periodError)}
+              aria-describedby={periodError ? "period-error" : undefined}
+              className="rounded border border-gray-400 p-2"
+            />
+          </label>
+        </div>
+
+        {periodError ? (
+          <p id="period-error" role="alert">{periodError}</p>
+        ) : activitiesLoading ? (
+          <p role="status">Chargement des séances…</p>
+        ) : activitiesError ? (
+          <p role="alert">{activitiesError}</p>
+        ) : activities.length === 0 ? (
+          <p role="status">Aucune séance sur cette période.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <caption className="mb-2 text-left">
+                {activities.length} séance{activities.length > 1 ? "s" : ""}
+              </caption>
+              <thead>
+                <tr className="border-b border-gray-400">
+                  <th scope="col" className="p-2">Date</th>
+                  <th scope="col" className="p-2">Distance</th>
+                  <th scope="col" className="p-2">Durée</th>
+                  <th scope="col" className="p-2">FC moyenne</th>
+                </tr>
+              </thead>
+              <tbody>
+                {activities.map((session, index) => (
+                  <tr key={`${session.date}-${index}`} className="border-b border-gray-300">
+                    <td className="p-2">
+                      <time dateTime={session.date}>
+                        {session.date.split("-").reverse().join("/")}
+                      </time>
+                    </td>
+                    <td className="p-2">{session.distance.toLocaleString("fr-FR")} km</td>
+                    <td className="p-2">{session.duration} min</td>
+                    <td className="p-2">{session.heartRate.average} BPM</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
     </main>
   );
 }

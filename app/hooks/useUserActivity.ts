@@ -17,6 +17,11 @@ export function useUserActivity(startDate: string, endDate: string) {
       setError(null);
       setActivities([]);
 
+      if (!startDate || !endDate || startDate > endDate) {
+        setLoading(false);
+        return;
+      }
+
       try {
         const data = await getUserActivity(startDate, endDate);
 
