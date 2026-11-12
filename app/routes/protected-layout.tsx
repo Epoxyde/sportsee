@@ -34,6 +34,10 @@ export default function ProtectedLayout() {
           </button>
         </nav>
       </header>
+      <p className="mx-auto max-w-3xl bg-amber-50 px-6 py-3 text-sm text-amber-950">
+        Données de démonstration : les statistiques affichées sont celles du mock de Sophie,
+        quel que soit le compte connecté.
+      </p>
       <Outlet />
     </>
   );

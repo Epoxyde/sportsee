@@ -42,11 +42,7 @@ export default function Login() {
   return (
     <main className="mx-auto max-w-md space-y-6 p-8">
       <h1 className="text-3xl font-bold">Connexion à SportSee</h1>
-      <p>Mode démonstration : connectez-vous avec le compte de Sophie.</p>
-      <p className="text-sm">
-        Identifiant : <code>sophiemartin</code><br />
-        Mot de passe : <code>password123</code>
-      </p>
+      <p>Connectez-vous avec votre compte SportSee.</p>
       <form onSubmit={handleSubmit} className="space-y-4" aria-busy={submitting}>
         <label className="flex flex-col gap-2">
           Identifiant
