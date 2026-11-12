@@ -4,12 +4,12 @@ import { useUserActivity } from "../hooks/useUserActivity";
 
 export function meta() {
   return [
-    { title: "SportSee — Profil" },
+    { title: "SportSee — Dashboard" },
     { name: "description", content: "Vos informations et statistiques sportives." },
   ];
 }
 
-export default function Home() {
+export default function Dashboard() {
   const { user, loading, error } = useUserInfo();
   const [startDate, setStartDate] = useState("2026-11-02");
   const [endDate, setEndDate] = useState("2026-11-08");
@@ -26,7 +26,7 @@ export default function Home() {
 
   return (
     <main className="mx-auto max-w-3xl space-y-6 p-8 text-gray-900 dark:text-gray-100">
-      <h1 className="text-3xl font-bold">SportSee</h1>
+      <h1 className="text-3xl font-bold">Dashboard</h1>
 
       {loading ? (
         <p role="status">Chargement du profil…</p>
