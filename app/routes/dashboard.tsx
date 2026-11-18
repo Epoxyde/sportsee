@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useUserInfo } from "../hooks/useUserInfo";
 import { useUserActivity } from "../hooks/useUserActivity";
 import { DistancePerformance } from "../components/DistancePerformance";
+import { HeartRatePerformance } from "../components/HeartRatePerformance";
 
 export function meta() {
   return [
@@ -68,6 +69,7 @@ export default function Dashboard() {
       <section className="space-y-4 rounded-xl bg-[#f2f3ff] p-6 text-[#111]" aria-labelledby="performances-title">
         <h2 id="performances-title" className="text-[22px] font-medium">Vos dernières performances</h2>
         <DistancePerformance />
+        <HeartRatePerformance />
       </section>
       <section className="space-y-4" aria-labelledby="activities-title">
         <h2 id="activities-title" className="text-xl font-semibold">

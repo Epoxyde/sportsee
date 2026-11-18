@@ -1,28 +1,15 @@
-import { useState } from "react";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { WeeklyDistance } from "../utils/buildWeeklyDistance";
-
-export function formatChartDate(date: string): string {
-  return new Date(`${date}T00:00:00Z`).toLocaleDateString("fr-FR", {
-    day: "numeric", month: "short", timeZone: "UTC",
-  });
-}
+import { formatChartDate } from "../utils/dates";
 
 export function formatDistance(distance: number): string {
   return distance.toLocaleString("fr-FR", { maximumFractionDigits: 2 });
 }
 
 export function WeeklyDistanceChart({ weeks }: { weeks: WeeklyDistance[] }) {
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-
   return (
     <>
-      <div className="h-[307px] w-full min-w-0"
-        onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-        onFocus={() => setFocused(true)} onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false);
-        }}>
+      <div className="performance-chart distance-chart h-[325px] w-full min-w-0">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={weeks} margin={{ top: 8, right: 0, bottom: 4, left: 0 }} accessibilityLayer>
             <CartesianGrid vertical={false} stroke="#f1f1f1" strokeDasharray="2 3" />
@@ -44,15 +31,13 @@ export function WeeklyDistanceChart({ weeks }: { weeks: WeeklyDistance[] }) {
                   </div>
                 );
               }} />
-            <Bar dataKey="distance" name="Distance" fill={hovered || focused ? "#0a23f4" : "#b6bdfc"} barSize={14}
+            <Legend align="left" verticalAlign="bottom" iconSize={8}
+              labelStyle={{ color: "#707070", fontSize: 12 }} />
+            <Bar dataKey="distance" name="Km" legendType="circle" fill="#b6bdfc" barSize={14}
               radius={[7, 7, 7, 7]} isAnimationActive={false} />
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <p className="flex items-center text-xs text-[#707070]">
-        <img src="/images/distance-legend.svg" alt="" />
-        Km
-      </p>
       <ul className="sr-only" aria-label="Distances hebdomadaires">
         {weeks.map((week) => (
           <li key={week.startDate}>

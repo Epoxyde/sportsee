@@ -1,5 +1,36 @@
 @import "tailwindcss";
 
+.performance-chart .recharts-rectangle {
+  transition: fill 200ms ease-in-out;
+}
+
+.performance-chart .recharts-line-curve {
+  transition: stroke 200ms ease-in-out;
+}
+
+.distance-chart .recharts-bar-rectangle .recharts-rectangle {
+  fill: #b6bdfc;
+}
+
+.distance-chart:is(:hover, :focus-within) .recharts-bar-rectangle .recharts-rectangle {
+  fill: #0a23f4;
+}
+
+.heart-rate-chart .recharts-line-curve {
+  stroke: #f2f3ff;
+}
+
+.heart-rate-chart:is(:hover, :focus-within) .recharts-line-curve {
+  stroke: #0b23f4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .performance-chart .recharts-rectangle,
+  .performance-chart .recharts-line-curve {
+    transition: none;
+  }
+}
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
