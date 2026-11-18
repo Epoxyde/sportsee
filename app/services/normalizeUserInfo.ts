@@ -1,4 +1,4 @@
-type UserInfoResponse = {
+export type UserInfoResponse = {
   profile: {
     firstName: string;
     lastName: string;
