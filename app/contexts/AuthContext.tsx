@@ -1,4 +1,5 @@
 import { createContext, useCallback, useEffect, useState, type ReactNode } from "react";
+import axios from "axios";
 import { getSessionExpiration, isValidSession, loginUser, type AuthSession } from "../services/authService";
 import { api } from "../services/api";
 
@@ -58,6 +59,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     delete api.defaults.headers.common.Authorization;
     setSession(null);
   }, []);
+
+  useEffect(() => {
+    const interceptor = api.interceptors.response.use(
+      (response) => response,
+      (error: unknown) => {
+        if (axios.isAxiosError(error)) {
+          const status = error.response?.status;
+          const requestToken = error.config?.headers.get("Authorization");
+          const currentToken = api.defaults.headers.common.Authorization;
+
+          // Une ancienne requête ne doit pas déconnecter une nouvelle session.
+          // Les erreurs de connexion restent gérées par le formulaire.
+          if ((status === 401 || status === 403)
+            && error.config?.url !== "/login"
+            && currentToken && requestToken === currentToken) {
+            logout();
+          }
+        }
+        return Promise.reject(error);
+      },
+    );
+
+    return () => api.interceptors.response.eject(interceptor);
+  }, [logout]);
 
   useEffect(() => {
     if (!session) return;

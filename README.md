@@ -2,7 +2,7 @@
 
 Projet 6 de la formation OpenClassrooms : développer un dashboard de sport avec React et React Router.
 
-L'application permet de se connecter, de consulter son profil et de suivre ses distances parcourues, sa fréquence cardiaque et son activité hebdomadaire. Le projet est en cours : l'intégration visuelle complète des pages reste à finaliser.
+L'application permet de se connecter, de consulter son profil et de suivre ses distances parcourues, sa fréquence cardiaque et son activité hebdomadaire. Les pages de connexion, de tableau de bord et de profil sont intégrées d'après la maquette fournie.
 
 ## Technologies
 
@@ -57,6 +57,8 @@ L'adresse de l'API est définie dans `app/services/api.ts`.
 - Les URL inconnues affichent une page 404.
 
 Le backend renvoie un JWT lors de la connexion. `AuthContext` conserve la session dans `sessionStorage` et transmet le token dans l'en-tête `Authorization: Bearer …` des requêtes Axios. La déconnexion et l'expiration du token effacent la session. La vérification de la signature du JWT reste à la charge du backend.
+
+Si l'API refuse le token de la session courante avec une réponse 401 ou 403, la session locale est effacée et les routes protégées redirigent vers la connexion. Une erreur d'identifiants sur `/login`, une panne réseau ou une erreur serveur ne déclenche pas cette déconnexion. Une réponse tardive liée à un ancien token ne déconnecte pas une nouvelle session.
 
 Le formulaire affiche « Identifiant » plutôt que « Adresse email » (libellé de la maquette), car le backend attend un `username`. La réinitialisation du mot de passe n'est pas disponible : la mention « Mot de passe oublié ? » reste un simple texte sans action. Les mentions « Conditions générales » et « Contact » du pied de page n'ont pas de destination définie et restent du texte.
 
