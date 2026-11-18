@@ -58,6 +58,8 @@ L'adresse de l'API est définie dans `app/services/api.ts`.
 
 Le backend renvoie un JWT lors de la connexion. `AuthContext` conserve la session dans `sessionStorage` et transmet le token dans l'en-tête `Authorization: Bearer …` des requêtes Axios. La déconnexion et l'expiration du token effacent la session. La vérification de la signature du JWT reste à la charge du backend.
 
+Le formulaire affiche « Identifiant » plutôt que « Adresse email » (libellé de la maquette), car le backend attend un `username`. La réinitialisation du mot de passe n'est pas disponible : la mention « Mot de passe oublié ? » reste un simple texte sans action. Les mentions « Conditions générales » et « Contact » du pied de page n'ont pas de destination définie et restent du texte.
+
 ## Organisation du code
 
 | Dossier ou fichier | Rôle |

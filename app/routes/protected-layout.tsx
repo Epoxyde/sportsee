@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import { NavLink, Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "../hooks/useAuth";
-import { SportSeeLogo } from "../components/SportSeeLogo";
+import { SiteHeader } from "../components/SiteHeader";
+import { SiteFooter } from "../components/SiteFooter";
 
 export default function ProtectedLayout() {
   const { session, ready, logout } = useAuth();
@@ -21,17 +22,19 @@ export default function ProtectedLayout() {
 
   return (
     <div className="sportsee-shell">
-      <header className="sportsee-header">
-        <NavLink to="/dashboard" aria-label="SportSee — Dashboard"><SportSeeLogo /></NavLink>
-        <nav aria-label="Navigation principale" className="sportsee-navigation">
-          <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>
-          <NavLink to="/profile" className={linkClass}>Mon profil</NavLink>
-          <button type="button" onClick={logout} className="cursor-pointer border-l border-[#b6bdfc] pl-10 text-[#0b23f4] hover:underline underline-offset-4">
-            Se déconnecter
-          </button>
-        </nav>
-      </header>
-      <Outlet />
+      <div className="sportsee-content">
+        <SiteHeader>
+          <nav aria-label="Navigation principale" className="sportsee-navigation">
+            <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>
+            <NavLink to="/profile" className={linkClass}>Mon profil</NavLink>
+            <button type="button" onClick={logout} className="cursor-pointer border-l border-[#b6bdfc] pl-10 text-[#0b23f4] hover:underline underline-offset-4">
+              Se déconnecter
+            </button>
+          </nav>
+        </SiteHeader>
+        <Outlet />
+      </div>
+      <SiteFooter />
     </div>
   );
 }

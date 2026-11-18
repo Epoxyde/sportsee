@@ -1,6 +1,7 @@
 import { useState, type SubmitEvent } from "react";
 import { Navigate, useLocation } from "react-router";
 import { useAuth } from "../hooks/useAuth";
+import { SiteHeader } from "../components/SiteHeader";
 
 export function meta() {
   return [{ title: "SportSee — Connexion" }];
@@ -40,42 +41,46 @@ export default function Login() {
   }
 
   return (
-    <main className="mx-auto max-w-md space-y-6 p-8">
-      <h1 className="text-3xl font-bold">Connexion à SportSee</h1>
-      <p>Connectez-vous avec votre compte SportSee.</p>
-      <form onSubmit={handleSubmit} className="space-y-4" aria-busy={submitting}>
-        <label className="flex flex-col gap-2">
-          Identifiant
-          <input
-            name="username"
-            autoComplete="username"
-            required
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-            className="rounded border border-gray-400 p-2"
-          />
-        </label>
-        <label className="flex flex-col gap-2">
-          Mot de passe
-          <input
-            type="password"
-            name="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            className="rounded border border-gray-400 p-2"
-          />
-        </label>
-        {error && <p role="alert">{error}</p>}
-        <button
-          type="submit"
-          disabled={submitting}
-          className="cursor-pointer rounded bg-blue-700 px-4 py-2 text-white disabled:cursor-wait disabled:opacity-60"
-        >
-          {submitting ? "Connexion en cours…" : "Se connecter"}
-        </button>
-      </form>
+    <main className="login-page">
+      <section className="login-panel" aria-labelledby="login-heading">
+        <SiteHeader className="login-header" />
+        <div className="login-card">
+          <h1 id="login-heading">Transformez<br />vos stats en résultats</h1>
+          <form onSubmit={handleSubmit} aria-busy={submitting}>
+            <h2>Se connecter</h2>
+            <label className="login-field">
+              Identifiant
+              <input
+                name="username" autoComplete="username" autoCapitalize="none" spellCheck={false}
+                required value={username}
+                onChange={(event) => setUsername(event.target.value)}
+                aria-describedby={error ? "login-error" : undefined}
+              />
+            </label>
+            <label className="login-field">
+              Mot de passe
+              <input
+                type="password" name="password" autoComplete="current-password"
+                required value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                aria-describedby={error ? "login-error" : undefined}
+              />
+            </label>
+            {error && <p id="login-error" role="alert" className="login-error">{error}</p>}
+            <button type="submit" disabled={submitting} className="login-submit">
+              {submitting ? "Connexion en cours…" : "Se connecter"}
+            </button>
+          </form>
+          <p className="login-password-help">Mot de passe oublié ?</p>
+        </div>
+      </section>
+      <div className="login-visual">
+        <img className="login-picture" src="/images/login-runners.jpg" alt="" />
+        <p className="login-caption">
+          Analysez vos performances en un clin d’œil,<br />
+          suivez vos progrès et atteignez vos objectifs.
+        </p>
+      </div>
     </main>
   );
 }

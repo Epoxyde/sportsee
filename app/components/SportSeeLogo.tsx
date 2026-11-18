@@ -9,7 +9,7 @@ const bars = [
   { x: 16, lowerY: 11.3281, lowerHeight: 6, upperHeight: 14, rise: 0.20 },
 ];
 
-export function SportSeeLogo() {
+export function SportSeeLogo({ markOnly = false }: { markOnly?: boolean }) {
   const id = useId();
   const lowerGradient = `${id}-lower`;
   const upperGradient = `${id}-upper`;
@@ -42,7 +42,7 @@ export function SportSeeLogo() {
           </g>
         ))}
       </svg>
-      <img src="/images/sportsee-wordmark.svg" alt="" width="132.971" height="23.4062" />
+      {!markOnly && <img src="/images/sportsee-wordmark.svg" alt="" width="132.971" height="23.4062" />}
     </span>
   );
 }
