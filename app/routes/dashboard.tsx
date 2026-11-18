@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUserInfo } from "../hooks/useUserInfo";
 import { useUserActivity } from "../hooks/useUserActivity";
+import { DistancePerformance } from "../components/DistancePerformance";
 
 export function meta() {
   return [
@@ -64,6 +65,10 @@ export default function Dashboard() {
       ) : (
         <p>Aucune information utilisateur disponible.</p>
       )}
+      <section className="space-y-4 rounded-xl bg-[#f2f3ff] p-6 text-[#111]" aria-labelledby="performances-title">
+        <h2 id="performances-title" className="text-[22px] font-medium">Vos dernières performances</h2>
+        <DistancePerformance />
+      </section>
       <section className="space-y-4" aria-labelledby="activities-title">
         <h2 id="activities-title" className="text-xl font-semibold">
           Vos séances
