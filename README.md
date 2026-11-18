@@ -71,13 +71,23 @@ Le formulaire affiche « Identifiant » plutôt que « Adresse email » (libell�
 | `app/hooks/` | Chargement des données, états de chargement et d'erreur |
 | `app/services/` | Appels Axios et normalisation des réponses |
 | `app/utils/` | Calcul des périodes et préparation des données des graphiques |
-| `app/mocks/` | Anciennes données de développement, conservées comme référence |
+| `app/mocks/` | Données de développement utilisées en mode mock |
 
 Les composants utilisent les hooks, qui appellent les services. Les requêtes HTTP sont réalisées en dehors des composants. La distance totale du profil, reçue sous forme de chaîne, est convertie en nombre avant utilisation.
 
 ## Données et calculs
 
-Les données affichées proviennent de l'API, pour le compte connecté. Les mocks du frontend ne sont plus utilisés et ne remplacent pas automatiquement une API indisponible.
+Par défaut, les données affichées proviennent de l'API, pour le compte connecté. Pour changer de source sans modifier les composants ni les hooks, copier `.env.example` vers `.env` à la racine du frontend :
+
+```bash
+cp .env.example .env
+```
+
+Dans `.env`, choisir `VITE_DATA_SOURCE=mock` pour les données locales ou `VITE_DATA_SOURCE=api` pour l'API, puis redémarrer le serveur frontend. En déploiement, reconstruire l'application après ce changement. Sans configuration, le mode API est utilisé. `.env` est ignoré par Git ; `.env.example` est versionné.
+
+Le choix est centralisé dans `app/services/userService.ts`. Les deux sources renvoient le même format : profil normalisé, activités triées, bornes de période incluses et séances futures exclues. Une erreur API n'entraîne jamais de bascule automatique vers les mocks.
+
+**Le mode mock concerne uniquement le profil et les activités.** La connexion et la photo restent dépendantes du backend. Utiliser le compte de démonstration Sophie : les mocks représentent toujours Sophie, quel que soit le compte connecté. Leur historique est partiel et leurs totaux sont des valeurs de démonstration ; les calories et jours de repos calculés ne constituent donc pas un bilan réel depuis l'inscription.
 
 | Requête | Utilisation |
 | --- | --- |
@@ -114,26 +124,19 @@ Les calories et les jours de repos sont calculés à partir de `/api/user-activi
 - Calories : somme des champs `caloriesBurned` des séances.
 - Jours de repos : nombre de jours calendaires de la période moins le nombre de dates distinctes avec au moins une course. Deux séances le même jour comptent pour un seul jour actif.
 
-Un jour sans course enregistrée est considéré comme un jour de repos, y compris aujourd'hui tant qu'aucune séance n'est enregistrée. Ce calcul suppose un historique complet. Le jeu local conserve les séances d’origine depuis l’inscription jusqu’au 20 septembre 2026 inclus, puis utilise les séances personnalisées à partir du 21 septembre 2026.
+Un jour sans course enregistrée est considéré comme un jour de repos, y compris aujourd'hui tant qu'aucune séance n'est enregistrée. Ce calcul suppose un historique complet. Le backend local utilise les données d’origine fournies avec le projet ; seules les séances comprises entre l’inscription et aujourd’hui sont prises en compte pour ces deux calculs.
 
 Ces deux calculs excluent les séances futures. Les trois totaux globaux restent ceux du backend et peuvent, eux, inclure des séances futures (voir ci-dessous). En cas d'échec du chargement des activités, les deux cartes affichent « Indisponible », et non des zéros trompeurs.
 
-### Jeu de données personnalisé du backend local
+### Données du backend local
 
-Pour tester des semaines plus actives, le backend local utilise un jeu de données personnalisé :
+Les données de l’API proviennent du fichier `backend/app/data.json` fourni avec le backend.
 
-- `backend/app/data.original.json` conserve le fichier d'origine.
-- `backend/app/data.json` contient l’historique fusionné utilisé par l’API.
-- `backend/app/data.custom-before-history.json` sauvegarde le jeu personnalisé avant la réintégration de l’historique.
-- Les comptes et les profils sont conservés ; seules les séances ont été remplacées.
-- Les séances d’origine sont conservées depuis janvier 2025 jusqu’au 20 septembre 2026 inclus.
-- À partir du 21 septembre 2026, seules les séances personnalisées sont utilisées, jusqu’en décembre 2026 : plusieurs courses par semaine, doubles séances et semaine de repos. Les périodes ne se chevauchent pas.
+Ce fichier est extérieur au dépôt frontend. Les mocks du frontend restent disponibles via `VITE_DATA_SOURCE=mock` pour tester des semaines plus actives sans modifier le backend.
 
-Ces fichiers sont extérieurs au dépôt frontend. Une autre installation du backend utilisera ses propres données.
+Les données sont fixes : le backend ne génère pas de nouvelles séances à chaque requête. L’endpoint d’activité exclut les dates futures, même si elles sont déjà présentes dans le fichier. En revanche, les statistiques globales de `/api/user-info` additionnent toutes les séances du fichier, y compris les futures : c’est le comportement actuel du backend fourni.
 
-Les données sont fixes : le backend ne génère pas de nouvelles séances à chaque requête. L'endpoint d'activité exclut les dates futures, même si elles sont déjà présentes dans le fichier. En revanche, les statistiques globales de `/api/user-info` additionnent toutes les séances du fichier, y compris les futures : c'est le comportement actuel du backend fourni.
-
-Après une modification du fichier, redémarrer le backend si nécessaire. Pour revenir aux données d'origine, arrêter le backend, conserver une copie du fichier personnalisé puis recopier `data.original.json` vers `data.json` et relancer le serveur.
+Après une modification des données, redémarrer le backend si nécessaire pour charger le fichier mis à jour.
 
 ## Vérifications et build
 
