@@ -11,8 +11,8 @@ function HeartRatePeriod({ startDate, navigation }: { startDate: string; navigat
 
   return (
     <>
-      <div className="flex items-center justify-between gap-3">
-        <h3 className="min-w-0 text-[22px] font-medium text-[#f4320b]">
+      <div className="flex min-h-[32px] items-center justify-between gap-3">
+        <h3 className="min-w-0 text-[22px] leading-[26px] font-medium text-[#f4320b]">
           {loading || error || averageHeartRate === null ? "— BPM" : `${Math.round(averageHeartRate)} BPM`}
         </h3>
         {navigation}
@@ -36,7 +36,7 @@ export function HeartRatePerformance() {
 
   return (
     <article aria-label="Fréquence cardiaque sur une semaine"
-      className="w-full max-w-[583px] rounded-[10px] bg-white px-6 pt-4 pb-6 text-[#111] shadow-[0px_4px_84px_-40px_rgba(157,167,251,0.4)] sm:px-10">
+      className="chart-card w-full max-w-[583px] rounded-[10px] bg-white text-[#111] shadow-[0px_4px_84px_-40px_rgba(157,167,251,0.4)]">
       <HeartRatePeriod key={startDate} startDate={startDate} navigation={
         <PeriodNavigation startDate={startDate} endDate={shiftDate(startDate, 6)}
           previousLabel="Afficher la semaine précédente" nextLabel="Afficher la semaine suivante"

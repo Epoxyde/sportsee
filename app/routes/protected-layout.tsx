@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { NavLink, Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "../hooks/useAuth";
+import { SportSeeLogo } from "../components/SportSeeLogo";
 
 export default function ProtectedLayout() {
   const { session, ready, logout } = useAuth();
@@ -16,22 +17,21 @@ export default function ProtectedLayout() {
     return <Navigate to="/login" replace state={redirectState} />;
   }
 
-  const linkClass = ({ isActive }: { isActive: boolean }) =>
-    isActive ? "font-semibold underline" : "hover:underline";
+  const linkClass = "sportsee-menu-link";
 
   return (
-    <>
-      <header className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4 border-b border-gray-300 p-6">
-        <span className="text-xl font-bold">SportSee</span>
-        <nav aria-label="Navigation principale" className="flex flex-wrap items-center gap-6">
+    <div className="sportsee-shell">
+      <header className="sportsee-header">
+        <NavLink to="/dashboard" aria-label="SportSee — Dashboard"><SportSeeLogo /></NavLink>
+        <nav aria-label="Navigation principale" className="sportsee-navigation">
           <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>
           <NavLink to="/profile" className={linkClass}>Mon profil</NavLink>
-          <button type="button" onClick={logout} className="cursor-pointer underline">
+          <button type="button" onClick={logout} className="cursor-pointer border-l border-[#b6bdfc] pl-10 text-[#0b23f4] hover:underline underline-offset-4">
             Se déconnecter
           </button>
         </nav>
       </header>
       <Outlet />
-    </>
+    </div>
   );
 }

@@ -14,7 +14,7 @@ export function WeeklySummary({ startDate, goal }: WeeklySummaryProps) {
   const summary = buildWeeklySummary(activities, startDate, goal);
 
   return (
-    <section className="space-y-8 rounded-xl bg-[#f2f3ff] p-6 text-[#111]" aria-labelledby="weekly-summary-title">
+    <section className="space-y-8 text-[#111]" aria-labelledby="weekly-summary-title">
       <header className="space-y-2">
         <h2 id="weekly-summary-title" className="text-[22px] font-medium">Cette semaine</h2>
         <p className="text-base font-medium text-[#707070]">
@@ -30,8 +30,8 @@ export function WeeklySummary({ startDate, goal }: WeeklySummaryProps) {
       ) : (
         <>
           {summary.completed === 0 && <p role="status">Aucune séance sur cette semaine.</p>}
-          <div className="grid gap-6 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-            <article className="min-w-0 rounded-[10px] bg-white px-5 pt-4 pb-8 shadow-[0px_4px_84px_-40px_rgba(157,167,251,0.4)]">
+          <div className="grid gap-[30px] md:grid-cols-[minmax(0,450fr)_minmax(0,572fr)]">
+            <article className="chart-card min-w-0 rounded-[10px] bg-white shadow-[0px_4px_84px_-40px_rgba(157,167,251,0.4)]">
               <h3 className="flex flex-wrap items-baseline gap-1.5">
                 <span className="text-[28px] font-semibold text-[#0b23f4]">x{summary.completed}</span>
                 <span className="text-base font-medium text-[#b6bdfc]">sur objectif de {goal}</span>

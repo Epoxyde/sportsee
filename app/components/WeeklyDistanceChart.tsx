@@ -3,7 +3,7 @@ import type { WeeklyDistance } from "../utils/buildWeeklyDistance";
 import { formatChartDate } from "../utils/dates";
 
 export function formatDistance(distance: number): string {
-  return distance.toLocaleString("fr-FR", { maximumFractionDigits: 2 });
+  return distance.toLocaleString("fr-FR", { maximumFractionDigits: 1 });
 }
 
 export function WeeklyDistanceChart({ weeks }: { weeks: WeeklyDistance[] }) {
