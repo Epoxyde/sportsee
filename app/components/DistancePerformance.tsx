@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { useUserActivity } from "../hooks/useUserActivity";
 import { buildWeeklyDistance } from "../utils/buildWeeklyDistance";
-import { shiftDate } from "../utils/dates";
+import { getCurrentWeekStart, shiftDate } from "../utils/dates";
 import { formatDistance, WeeklyDistanceChart } from "./WeeklyDistanceChart";
 import { PeriodNavigation } from "./PeriodNavigation";
 
@@ -37,8 +37,8 @@ function DistancePeriod({ startDate, navigation }: { startDate: string; navigati
 }
 
 export function DistancePerformance() {
-  // Période de démonstration couverte par nos mocks, du lundi au dimanche.
-  const [startDate, setStartDate] = useState("2026-10-12");
+  // La semaine actuelle et les trois précédentes, du lundi au dimanche.
+  const [startDate, setStartDate] = useState(() => shiftDate(getCurrentWeekStart(), -21));
   const endDate = shiftDate(startDate, 27);
 
   return (

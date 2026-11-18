@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { useUserActivity } from "../hooks/useUserActivity";
 import { buildDailyHeartRate } from "../utils/buildDailyHeartRate";
-import { shiftDate } from "../utils/dates";
+import { getCurrentWeekStart, shiftDate } from "../utils/dates";
 import { DailyHeartRateChart } from "./DailyHeartRateChart";
 import { PeriodNavigation } from "./PeriodNavigation";
 
@@ -32,8 +32,7 @@ function HeartRatePeriod({ startDate, navigation }: { startDate: string; navigat
 }
 
 export function HeartRatePerformance() {
-  // Même semaine de référence que le tableau des séances du dashboard.
-  const [startDate, setStartDate] = useState("2026-11-02");
+  const [startDate, setStartDate] = useState(() => getCurrentWeekStart());
 
   return (
     <article aria-label="Fréquence cardiaque sur une semaine"

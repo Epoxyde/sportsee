@@ -3,6 +3,8 @@ import { useUserInfo } from "../hooks/useUserInfo";
 import { useUserActivity } from "../hooks/useUserActivity";
 import { DistancePerformance } from "../components/DistancePerformance";
 import { HeartRatePerformance } from "../components/HeartRatePerformance";
+import { WeeklySummary } from "../components/WeeklySummary";
+import { getCurrentWeekStart } from "../utils/dates";
 
 export function meta() {
   return [
@@ -71,6 +73,8 @@ export default function Dashboard() {
         <DistancePerformance />
         <HeartRatePerformance />
       </section>
+      {/* Objectif de la maquette, absent de l'API actuelle. */}
+      <WeeklySummary startDate={getCurrentWeekStart()} goal={6} />
       <section className="space-y-4" aria-labelledby="activities-title">
         <h2 id="activities-title" className="text-xl font-semibold">
           Vos séances
