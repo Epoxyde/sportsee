@@ -103,14 +103,29 @@ Le bilan concerne la semaine actuelle, du lundi au dimanche, selon la date local
 
 Le nombre de courses restantes et l'anneau de progression reposent donc sur cette hypothèse. Au-delà de six séances, l'anneau reste à 100 %, tandis que le compteur affiche le nombre réel de courses. Cette limite devra être revue si l'API fournit un objectif utilisateur.
 
+### Statistiques complémentaires du profil
+
+La page Profil conserve les totaux renvoyés par `/api/user-info` (durée, distance et nombre de sessions). Le genre n'est pas fourni par cette réponse : il reste affiché comme « Indisponible ».
+
+Les calories et les jours de repos sont calculés à partir de `/api/user-activity`, depuis la date d'inscription jusqu'à la date locale du jour, bornes incluses :
+
+- Calories : somme des champs `caloriesBurned` des séances.
+- Jours de repos : nombre de jours calendaires de la période moins le nombre de dates distinctes avec au moins une course. Deux séances le même jour comptent pour un seul jour actif.
+
+Un jour sans course enregistrée est considéré comme un jour de repos, y compris aujourd'hui tant qu'aucune séance n'est enregistrée. Ce calcul suppose un historique complet. Le jeu local conserve les séances d’origine depuis l’inscription jusqu’au 20 septembre 2026 inclus, puis utilise les séances personnalisées à partir du 21 septembre 2026.
+
+Ces deux calculs excluent les séances futures. Les trois totaux globaux restent ceux du backend et peuvent, eux, inclure des séances futures (voir ci-dessous). En cas d'échec du chargement des activités, les deux cartes affichent « Indisponible », et non des zéros trompeurs.
+
 ### Jeu de données personnalisé du backend local
 
 Pour tester des semaines plus actives, le backend local utilise un jeu de données personnalisé :
 
 - `backend/app/data.original.json` conserve le fichier d'origine.
-- `backend/app/data.json` contient les données personnalisées utilisées par l'API.
+- `backend/app/data.json` contient l’historique fusionné utilisé par l’API.
+- `backend/app/data.custom-before-history.json` sauvegarde le jeu personnalisé avant la réintégration de l’historique.
 - Les comptes et les profils sont conservés ; seules les séances ont été remplacées.
-- Les séances couvrent septembre à décembre 2026, avec plusieurs courses par semaine, des doubles séances et une semaine de repos.
+- Les séances d’origine sont conservées depuis janvier 2025 jusqu’au 20 septembre 2026 inclus.
+- À partir du 21 septembre 2026, seules les séances personnalisées sont utilisées, jusqu’en décembre 2026 : plusieurs courses par semaine, doubles séances et semaine de repos. Les périodes ne se chevauchent pas.
 
 Ces fichiers sont extérieurs au dépôt frontend. Une autre installation du backend utilisera ses propres données.
 
